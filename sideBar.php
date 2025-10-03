@@ -1054,8 +1054,7 @@
                     <i class="bi bi-chevron-left"></i>
                 </span>
             </h1>
-
-            <form method="POST" action="./add.php" enctype="multipart/form-data" class="p-3">
+<br>
                 <h5 class="card-title mb-3">Dados</h5>
 
                 <div class="row mb-3">
@@ -1078,7 +1077,47 @@
                         <i class="bi bi-save me-2"></i> Salvar
                     </button>
                 </div>
-            </form>
+
+            <form action="save_post.php" method="post" enctype="multipart/form-data" onsubmit="return prepareForm();">
+    <div class="mb-3">
+      <label for="title" class="form-label">Título</label>
+      <input type="text" class="form-control" id="title" name="title" required maxlength="255">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Conteúdo</label>
+      <div id="editor"></div>
+      <textarea name="content" id="content" hidden></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="category" class="form-label">Categoria</label>
+      <select class="form-select" id="category" name="category" required>
+        <option value="" disabled selected>Selecione uma categoria</option>
+        <?php
+        // $stmt = $ConnPdoPg->query("SELECT * FROM categories ORDER BY name");
+        // while ($row = $stmt->fetch()) {
+        //   echo '<option value="' . htmlspecialchars($row['id']) . '">' . htmlspecialchars($row['name']) . '</option>';
+        // }
+        ?>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="featured_image" class="form-label">Imagem em Destaque</label>
+      <input type="file" class="form-control" id="featured_image" name="featured_image" accept="image/*">
+      <div class="form-text">Tamanho máximo: 5MB. Formatos: JPG, PNG, GIF</div>
+    </div>
+
+    <div class="mb-3">
+      <label for="tags" class="form-label">Tags</label>
+      <input type="text" class="form-control" id="tags" name="tags" placeholder="Ex: meio ambiente, fiscalização">
+      <div class="form-text">Separe as tags por vírgula</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar Postagem</button>
+    <a href="javascript:history.back()" class="btn btn-secondary">Cancelar</a>
+  </form>
         </div> -->
 
 

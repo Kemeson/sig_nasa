@@ -33,7 +33,19 @@
 
     <script src="./leaflet/leaflet-sidebar.js"></script>
 
-    <style>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Quill CSS -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <style>
+    #editor {
+      height: 400px;
+      background-color: #fff;
+    }
+    .ql-editor img {
+      max-width: 100%;
+    }
+
         .lorem {
             font-style: italic;
             text-align: justify;
@@ -64,6 +76,126 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    
+<!-- Quill Scripts -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
+
+<script>
+  // Configuração da barra de ferramentas
+  const toolbarOptions = [
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+    ['blockquote', 'code-block'],
+
+        // Alinhamento e direção
+    [{ 'direction': 'rtl' }],
+    [{ 'align': [] }],
+    ['bold', 'italic', 'underline', 'strike'],
+
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    ['link', 'image', 'video'],
+    ['clean']
+  ];
+
+  // Inicialização do Quill com módulo de redimensionamento
+  const quill = new Quill('#editor', {
+    theme: 'snow',
+    placeholder: 'Escreva o conteúdo da postagem...',
+    modules: {
+      toolbar: {
+        container: toolbarOptions,
+        handlers: {
+          image: imageHandler
+        }
+      },
+      imageResize: {
+        displaySize: true
+      }
+    }
+  });
+
+  // Função para upload de imagens
+  async function imageHandler() {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return;
+
+      // Verificação básica do arquivo
+      if (file.size > 5 * 1024 * 1024) {
+        alert('O arquivo é muito grande. Tamanho máximo: 5MB');
+        return;
+      }
+
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      if (!validTypes.includes(file.type)) {
+        alert('Formato de arquivo inválido. Use JPG, PNG ou GIF');
+        return;
+      }
+
+      try {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const res = await fetch('upload_image.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!res.ok) throw new Error('Falha no upload');
+
+        const data = await res.json();
+
+        if (data.success && data.url) {
+          const range = quill.getSelection(true);
+          quill.insertEmbed(range.index, 'image', data.url);
+          quill.setSelection(range.index + 1);
+        } else {
+          alert(data.error || 'Erro desconhecido ao enviar imagem');
+        }
+      } catch (error) {
+        console.error('Erro no upload:', error);
+        alert('Erro ao enviar imagem. Por favor, tente novamente.');
+      }
+    };
+  }
+
+  // Preparação do formulário antes do envio
+  function prepareForm() {
+    const title = document.getElementById('title').value.trim();
+    const content = document.getElementById('content');
+    const category = document.getElementById('category').value;
+    
+    // Salva o conteúdo HTML do editor
+    content.value = quill.root.innerHTML.trim();
+
+    // Validações
+    if (!title) {
+      alert('O título não pode estar vazio.');
+      return false;
+    }
+
+    if (content.value === '' || content.value === '<p><br></p>') {
+      alert('O conteúdo da postagem não pode estar vazio.');
+      return false;
+    }
+
+    if (!category) {
+      alert('Selecione uma categoria.');
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
 
 </body>
 </html>
