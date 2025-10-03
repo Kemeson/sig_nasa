@@ -54,13 +54,75 @@
                     <ul class="tree-submenu show" id="geo_externo">
 
                         <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('municipios_sedes', sedesMun_options, map, 'sedesMun', sedesMun_conteudo, 'Sedes Municipais')" id="sedesMun"> Sedes Municipais
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('localidades', localidade_options, map, 'localidade', localidade_conteudo, 'Localidades')" id="localidade"> Localidades
+                        </li>
+
+                        <li>
                             <input class="input" type="checkbox" onclick="addRemoverLayer('municipios_limites', limitesMun_options, map, 'limitesMun', limitesMun_conteudo, 'Limites Municipais')" id="limitesMun" checked> Limites Municipais
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('estado_limites', limitesEst_options, map, 'limitesEst', limitesEst_conteudo, 'Limites do Estado')" id="limitesEst" checked> Limites do Estado
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('rodovias', rodovias_options, map, 'rodovias', rodovias_conteudo, 'Rodovias')" id="rodovias"> Rodovias
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('hidro_massadagua', trechoMassa_options, map, 'trechoMassa', trechoMassa_conteudo, `Trecho de Massa D'Água`)" id="trechoMassa"> Trecho de Massa D'Água
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('projetos_assentamentos', projetoAss_options, map, 'projetoAss', projetoAss_conteudo, 'Projetos de Assentamento')" id="projetoAss"> Projetos de Assentamento
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('glebas', gleba_options, map, 'gleba', gleba_conteudo, 'Glebas')" id="gleba"> Glebas
                         </li>
 
                     </ul>
                 </li>
 
                 <!-- Base Cartográfica - Fim -->
+
+
+
+
+                <!-- Áreas Institucionais - Início -->
+
+                <li>
+                    <span class="tree-toggle collapsed" onclick="toggleSubmenu(this)">Áreas Institucionais</span>
+                    <ul class="tree-submenu show" id="geo_externo">
+
+                        <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('areas_inalienaveis_spu', areaInalienavel_options, map, 'areaInalienavel', areaInalienavel_conteudo, 'Áreas Inalienáveis')" id="areaInalienavel"> Áreas Inalienáveis
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('areas_militares', areaMilitar_options, map, 'areaMilitar', areaMilitar_conteudo, 'Áreas Militares')" id="areaMilitar"> Áreas Militares
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('terras_indigenas', terraIndigena_options, map, 'terraIndigena', terraIndigena_conteudo, 'Terras Indígenas')" id="terraIndigena"> Terras Indígenas
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('ucs_estaduais', ucsEst_options, map, 'ucsEst', ucsEst_conteudo, 'Unidade de Conservação Estadual')" id="ucsEst"> Unidade de Conservação Estadual
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox" onclick="addRemoverLayer('ucs_federais', ucsFed_options, map, 'ucsFed', ucsFed_conteudo, 'Unidade de Conservação Federal')" id="ucsFed"> Unidade de Conservação Federal
+                        </li>
+
+                    </ul>
+                </li>
+
+                <!-- Áreas Institucionais - Fim -->
 
                 <!-- Dados Vetores - Início -->
 

@@ -251,7 +251,7 @@ var curvaNiv1_options = {
 
     // Adicionar a camada inicial quando a página carregar
     window.onload = function() {
-      // toggleLayer('ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cite:estado_limites&outputFormat=text/javascript&format_options=callback:getJson15', 'getJson15', limitesEst_options, map, 'limitesEst', false, 0, limitesEst_leg, false, limitesEst_conteudo, 'Limites do Estado');
+      addRemoverLayer('estado_limites', limitesEst_options, map, 'limitesEst', limitesEst_conteudo, 'Limites do Estado');
 
       addRemoverLayer('municipios_limites', limitesMun_options, map, 'limitesMun', limitesMun_conteudo, 'Limites Municipais');
     };
