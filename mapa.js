@@ -165,3 +165,50 @@ function addUser() {
         pane: '<p>user ipsum dolor sit amet</p>',
     });
 }
+
+// Barra de opções
+
+var drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
+
+var drawControl = new L.Control.Draw({
+  position: 'topright',
+  draw: {
+    polygon: {
+      shapeOptions: {
+        weight: 2
+      }
+    },
+    polyline: {
+      shapeOptions: {
+        weight: 2
+      },
+    },
+    rectangle: false,      // Desabilitar retângulos
+    circle: false,         // Desabilitar círculos
+    circlemarker: {
+      radius: 6,           // Tamanho do círculo
+      color: "#3388ff",    // Cor da borda
+      weight: 2,           // Espessura da borda
+      fillColor: "#3388ff",// Cor de preenchimento
+    },   // Desabilitar marcadores de círculo
+    marker: false,
+  },
+  edit: false
+});
+map.addControl(drawControl);
+
+
+map.pm.addControls({
+  position: 'topright',
+  drawMarker: false,
+  drawCircleMarker: false,
+  drawPolyline: false,
+  drawRectangle: false,
+  drawCircle: false,
+  drawPolygon: false,
+  dragMode: false,
+  cutPolygon: false,
+  editMode: false,
+  removalMode: false
+});
