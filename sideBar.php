@@ -1,3 +1,7 @@
+<?php
+include('./db.php');
+?>
+
 <!-- optionally define the sidebar content via HTML markup -->
 <div id="sidebar" class="leaflet-sidebar collapsed">
 
@@ -7,6 +11,7 @@
         <ul role="tablist">
             <li><a href="#home" role="tab"><i class="bi bi-list active"></i></a></li>
             <li><a href="#autopan" role="tab"><i class="bi bi-arrows-move"></i></a></li>
+            <li><a href="#editar" role="tab"><i class="bi bi-arrows-move"></i></a></li>
             <li><a href="#login" role="tab"><i class="bi bi-person"></i></a></li>
             <!-- <li><a href="#autopan2" role="tab"><i class="bi bi-arrows-move"></i></a></li> -->
         </ul>
@@ -127,6 +132,40 @@
                 <span class="leaflet-sidebar-close"><i class="bi bi-chevron-left"></i></span>
             </h1>
             <div id="texto"></div>
+        </div>
+
+
+        <div class="leaflet-sidebar-pane" id="editar">
+            <h1 class="leaflet-sidebar-header">
+                Editar Geometria
+                <span class="leaflet-sidebar-close"><i class="bi bi-chevron-left"></i></span>
+            </h1>
+            <div id="texto2">
+
+                <?php
+
+                $sql = "SELECT * FROM nasa2025.nasa_agua WHERE fk_user=2";
+                $result = pg_query($connPg, $sql);
+                if (pg_num_rows($result)) {
+                    while ($row = pg_fetch_assoc($result)) {
+
+                ?>
+
+                <input class="input" type="checkbox" onclick="addRemoverLayer2(nasa_options, map, <?php echo $row['gid']; ?>, nasa_conteudo, '<?php echo $row['titulo'] ?>')" id="<?php echo $row['gid'] ?>"> <?php echo $row['titulo'] ?>
+                
+                <button class="btn btn-info"><i class="bi bi-pencil"></i></button>
+
+                <br>
+
+                <?php
+                    }
+                }
+
+                ?>
+
+
+
+            </div>
         </div>
 
 

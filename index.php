@@ -90,6 +90,8 @@
 
     <script src="addRemoveMapa.js"></script>
 
+    <script src="nasaCamadas.js"></script>
+
     <script src="baseCartografica.js"></script>
 
     <script src="areasInstitucionais.js"></script>
