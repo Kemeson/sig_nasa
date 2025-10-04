@@ -115,8 +115,8 @@ function addRemoverLayerEdit2(layerOptions, map, id, conteudo = '', titulo = '',
 
         const current = layers1[id];
 
-        console.log('Layer atual:', current);
-console.log('No mapa?', map.hasLayer(current));
+//         console.log('Layer atual:', current);
+// console.log('No mapa?', map.hasLayer(current));
 
         if (!editing) {
             // Inicia edição
