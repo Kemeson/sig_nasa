@@ -250,8 +250,8 @@ var curvaNiv1_options = {
 
 
     // Adicionar a camada inicial quando a página carregar
-    window.onload = function() {
-      addRemoverLayer('estado_limites', limitesEst_options, map, 'limitesEst', limitesEst_conteudo, 'Limites do Estado');
+    // window.onload = function() {
+    //   addRemoverLayer('estado_limites', limitesEst_options, map, 'limitesEst', limitesEst_conteudo, 'Limites do Estado');
 
-      addRemoverLayer('municipios_limites', limitesMun_options, map, 'limitesMun', limitesMun_conteudo, 'Limites Municipais');
-    };
+    //   addRemoverLayer('municipios_limites', limitesMun_options, map, 'limitesMun', limitesMun_conteudo, 'Limites Municipais');
+    // };

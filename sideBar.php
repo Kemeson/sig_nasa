@@ -52,68 +52,61 @@ include('./db.php');
 
                 <!-- Mapas - Fim  -->
 
-                <!-- CAR Analisado - Início -->
+                <!-- Análise Ambiental - Início -->
 
                 <li>
-                    <span class="tree-toggle expanded" onclick="toggleSubmenu(this)"><b>CAR Analisado</b></span>
+                    <span class="tree-toggle expanded" onclick="toggleSubmenu(this)"><b>Análise Ambiental</b></span>
                     <ul class="tree-submenu show">
 
                         <!-- Base Cartográfica - Início -->
 
                         <li>
-                            <span class="tree-toggle expanded" onclick="toggleSubmenu(this)">Base Cartográfica</span>
-                            <ul class="tree-submenu show" id="geo_externo">
-
-                                <li>
-                                    <input class="input" type="checkbox"
-                                        onclick="addRemoverLayer('municipios_sedes', sedesMun_options, map, 'sedesMun', sedesMun_conteudo, 'Sedes Municipais')"
-                                        id="sedesMun"> Sedes Municipais
-                                </li>
-
-                                <li>
-                                    <input class="input" type="checkbox"
-                                        onclick="addRemoverLayer('localidades', localidade_options, map, 'localidade', localidade_conteudo, 'Localidades')"
-                                        id="localidade"> Localidades
-                                </li>
-
-                                <li>
-                                    <input class="input" type="checkbox"
-                                        onclick="addRemoverLayer('municipios_limites', limitesMun_options, map, 'limitesMun', limitesMun_conteudo, 'Limites Municipais')"
-                                        id="limitesMun" checked> Limites Municipais
-                                </li>
-
-                                <li>
-                                    <input class="input" type="checkbox"
-                                        onclick="addRemoverLayer('estado_limites', limitesEst_options, map, 'limitesEst', limitesEst_conteudo, 'Limites do Estado')"
-                                        id="limitesEst" checked> Limites do Estado
-                                </li>
-
-                                <li>
-                                    <input class="input" type="checkbox"
-                                        onclick="addRemoverLayer('rodovias', rodovias_options, map, 'rodovias', rodovias_conteudo, 'Rodovias')"
-                                        id="rodovias"> Rodovias
-                                </li>
-
-                                <li>
-                                    <input class="input" type="checkbox"
-                                        onclick="addRemoverLayer('hidro_massadagua', trechoMassa_options, map, 'trechoMassa', trechoMassa_conteudo, `Trecho de Massa D'Água`)"
-                                        id="trechoMassa"> Trecho de Massa D'Água
-                                </li>
-
-                                <li>
-                                    <input class="input" type="checkbox"
-                                        onclick="addRemoverLayer('projetos_assentamentos', projetoAss_options, map, 'projetoAss', projetoAss_conteudo, 'Projetos de Assentamento')"
-                                        id="projetoAss"> Projetos de Assentamento
-                                </li>
-
-                                <li>
-                                    <input class="input" type="checkbox"
-                                        onclick="addRemoverLayer('glebas', gleba_options, map, 'gleba', gleba_conteudo, 'Glebas')"
-                                        id="gleba"> Glebas
-                                </li>
-
-                            </ul>
+                            <input class="input" type="checkbox"
+                                onclick="addRemoverLayer2('categoria', map, 'desmatamento', nasa_conteudo, 'Desmatamento')"
+                                id="desmatamento"> Desmatamento
                         </li>
+
+                        <li>
+                            <input class="input" type="checkbox"
+                                onclick="addRemoverLayer2('categoria', map, 'poluicao', nasa_conteudo, 'Poluicao')"
+                                id="poluicao"> Poluicao
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox"
+                                onclick="addRemoverLayer2('categoria', map, 'enchentes', nasa_conteudo, 'Enchentes')"
+                                id="enchentes"> Enchentes
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox"
+                                onclick="addRemoverLayer2('categoria', map, 'ilhas_calor', nasa_conteudo, 'Ilhas de Calor')"
+                                id="ilhas_calor"> Ilhas de Calor
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox"
+                                onclick="addRemoverLayer2('categoria', map, 'erosao_assoreamento', nasa_conteudo, 'Erosao e Assoreamento')" id="erosao_assoreamento"> Erosao e Assoreamento
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox"
+                                onclick="addRemoverLayer2('categoria', map, 'urbanizacao', nasa_conteudo, 'Urbanizacao')"
+                                id="urbanizacao"> Urbanizacao
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox"
+                                onclick="addRemoverLayer2('categoria', map, 'riscos_geologicos', nasa_conteudo, 'Riscos Geologicos')"
+                                id="riscos_geologicos"> Riscos Geologicos
+                        </li>
+
+                        <li>
+                            <input class="input" type="checkbox"
+                                onclick="addRemoverLayer2('categoria', map, 'escassez_hidrica', nasa_conteudo, 'Escassez Hidrica')"
+                                id="escassez_hidrica"> Escassez Hidrica
+                        </li>
+
 
                         <!-- Base Cartográfica - Fim -->
                     </ul>
@@ -151,7 +144,7 @@ include('./db.php');
 
                 ?>
 
-                <input class="input" type="checkbox" onclick="addRemoverLayer2(nasa_options, map, <?php echo $row['gid']; ?>, nasa_conteudo, '<?php echo $row['titulo'] ?>', 'editLayer<?php echo $row['gid'] ?>', 'editModalLayer<?php echo $row['gid'] ?>')" id="<?php echo $row['gid'] ?>"> <?php echo $row['titulo'] ?>
+                <input class="input" type="checkbox" onclick="addRemoverLayer2('gid', map, <?php echo $row['gid']; ?>, nasa_conteudo, '<?php echo $row['titulo'] ?>', 'editLayer<?php echo $row['gid'] ?>', 'editModalLayer<?php echo $row['gid'] ?>')" id="<?php echo $row['gid'] ?>"> <?php echo $row['titulo'] ?>
                 
                 <button id="editModalLayer<?php echo $row['gid'] ?>" style=" display: none; background: transparent; cursor: pointer; border: none; font-size: 14px;" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#geoModal<?php echo $row['gid'] ?>">📍</button>
 

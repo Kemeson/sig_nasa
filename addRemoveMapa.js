@@ -80,31 +80,28 @@ function createLayer(urlLayer, layerOptions, map, id, conteudo, titulo) {
 
 var layers1 = {};
 
-function addRemoverLayer2(layerOptions, map, id, conteudo = '', titulo = '', editBtn, editModal) {
+function addRemoverLayer2(prop, map, filtro, conteudo = '', titulo = '', editBtn, editModal) {
 
-    var checkbox = document.getElementById(id);
+    var checkbox = document.getElementById(filtro);
 
     if (checkbox.checked) {
         // Se o checkbox estiver marcado, cria a camada e a adiciona
-        layers1[id] = createLayer2(layerOptions, map, id, conteudo, titulo);
+        layers1[filtro] = createLayer2(prop, map, filtro, conteudo, titulo);
         document.getElementById(editBtn).style.display = 'inline-block';
         document.getElementById(editModal).style.display = 'inline-block';
 
     } else {
         // Se o checkbox estiver desmarcado, remove a camada do mapa
-        if (layers1[id]) {
-            map.removeLayer(layers1[id]);  // Remove a camada correta (cluster ou não)
-            delete layers1[id];  // Remove a referência da camada
+        if (layers1[filtro]) {
+            map.removeLayer(layers1[filtro]);  // Remove a camada correta (cluster ou não)
+            delete layers1[filtro];  // Remove a referência da camada
             document.getElementById(editBtn).style.display = 'none';
             document.getElementById(editModal).style.display = 'none';
         }
     }
-
-
-
-
-
 }
+
+
 let editing = false; // estado do botão
 function addRemoverLayerEdit2(layerOptions, map, id, conteudo = '', titulo = '', editBtnId, geom) {
 
@@ -146,7 +143,7 @@ function addRemoverLayerEdit2(layerOptions, map, id, conteudo = '', titulo = '',
 
 
 // Função genérica para criar camadas e adicionar dados com ou sem marker cluster
-function createLayer2(layerOptions, map, id, conteudo, titulo) {
+function createLayer2(prop, map, filtro, conteudo, titulo) {
 
     var layer;
 
@@ -155,52 +152,59 @@ function createLayer2(layerOptions, map, id, conteudo, titulo) {
 
     var url = 'http://localhost/sig_nasa/';
 
-    $.getJSON(url + 'nasaTabela.php', function (data) {
-
-        console.log(data);
+    $.getJSON(url+'nasaTabela.php', function(data) {
 
         layer = L.geoJSON(data, {
             filter: function (features) {
-                if (features.properties.gid == id) {
+                if(features.properties[prop] == filtro){
                     return true
                 }
             },
-            color: "#FF8C00",
-            weight: 2
+            style: function(feature) {
+                switch (feature.properties.categoria) {
+                    case 'desmatamento': return {color: "#2E7D32", weight: 2};
+                    case 'poluicao': return {color: "#455A64", weight: 2};
+                    case 'enchentes': return {color: "#0277BD", weight: 2};
+                    case 'ilhas_calor': return {color: "#F57C00", weight: 2};
+                    case 'erosao_assoreamento': return {color: "#8D6E63", weight: 2};
+                    case 'urbanizacao': return {color: "#6A1B9A", weight: 2};
+                    case 'riscos_geologicos': return {color: "#C62828", weight: 2};
+                    case 'escassez_hidrica': return {color: "#0097A7", weight: 2};
+                }
+            }
         });
 
+        layer.on('click', function(e) {
 
-        layer.on('click', function (e) {
-
-            const props = e.layer.feature.properties;
+        const props = e.layer.feature.properties;
 
 
-            let contentPerFeature = conteudo.replace(/\{([\w_]+)\}/g, function (_, key) {
-                let value = props[key];
-                if ((key === 'area' || key === 'area_ha' || key === 'area_hecta' || key === 'hectares' || key === 'area_est_ha' || key === 'qtd_area_d' || key === 'area_km' || key === 'ha') && typeof value === 'number') {
-                    return value.toLocaleString('pt-BR', {
-                        minimumFractionDigits: 4,
-                        maximumFractionDigits: 4
-                    });
-                }
-
-                return (value !== undefined && value !== null) ? value : '-';
+        let contentPerFeature = conteudo.replace(/\{([\w_]+)\}/g, function(_, key) {
+        let value = props[key];
+        if ((key === 'area' || key === 'area_ha' || key === 'area_hecta' || key === 'hectares' || key === 'area_est_ha' || key === 'qtd_area_d' || key === 'area_km' || key === 'ha') && typeof value === 'number') {
+            return value.toLocaleString('pt-BR', {
+            minimumFractionDigits: 4,
+            maximumFractionDigits: 4
             });
+        }
 
-            // Atualiza título
-            document.getElementById('staticBackdropLabel').innerText = titulo;
+            return (value !== undefined && value !== null) ? value : '-';
+        });
 
-            // Atualiza body
-            document.getElementById('modalBody').innerHTML = contentPerFeature;
+        // Atualiza título
+        document.getElementById('staticBackdropLabel').innerText = titulo;
 
-            // Abre modal usando Bootstrap
-            var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
-            myModal.show();
+        // Atualiza body
+        document.getElementById('modalBody').innerHTML = contentPerFeature;
+
+        // Abre modal usando Bootstrap
+        var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+        myModal.show();
 
         })
 
         map.addLayer(layer);  // Adiciona a camada normal ao mapa
-        layers1[id] = layer;  // Salva a camada para remoção futura
+        layers1[filtro] = layer;  // Salva a camada para remoção futura
 
 
         return layer;  // Retorna a camada, caso seja necessário manipular depois
