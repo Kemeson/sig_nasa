@@ -1,6 +1,6 @@
 var layers = {};
 
-function addRemoverLayer(urlLayer, layerOptions, map, id, conteudo = '', titulo = ''){
+function addRemoverLayer(urlLayer, layerOptions, map, id, conteudo = '', titulo = '') {
 
     var checkbox = document.getElementById(id);
 
@@ -11,8 +11,8 @@ function addRemoverLayer(urlLayer, layerOptions, map, id, conteudo = '', titulo 
     } else {
         // Se o checkbox estiver desmarcado, remove a camada do mapa
         if (layers[id]) {
-        map.removeLayer(layers[id]);  // Remove a camada correta (cluster ou não)
-        delete layers[id];  // Remove a referência da camada
+            map.removeLayer(layers[id]);  // Remove a camada correta (cluster ou não)
+            delete layers[id];  // Remove a referência da camada
         }
     }
 
@@ -30,38 +30,38 @@ function createLayer(urlLayer, layerOptions, map, id, conteudo, titulo) {
     // Cria uma camada GeoJSON normal (sem cluster)
     layer = L.geoJSON(null, layerOptions);
 
-    var url = 'https://geoserverintranet.femarh.rr.gov.br/geoserver/cite/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cite:'+urlLayer+'&outputFormat=application/json';
+    var url = 'https://geoserverintranet.femarh.rr.gov.br/geoserver/cite/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=cite:' + urlLayer + '&outputFormat=application/json';
 
-    $.getJSON(url, function(data) {
+    $.getJSON(url, function (data) {
         layer.addData(data);
 
 
-        layer.on('click', function(e) {
+        layer.on('click', function (e) {
 
-        const props = e.layer.feature.properties;
+            const props = e.layer.feature.properties;
 
 
-        let contentPerFeature = conteudo.replace(/\{([\w_]+)\}/g, function(_, key) {
-        let value = props[key];
-        if ((key === 'area' || key === 'area_ha' || key === 'area_hecta' || key === 'hectares' || key === 'area_est_ha' || key === 'qtd_area_d' || key === 'area_km' || key === 'ha') && typeof value === 'number') {
-            return value.toLocaleString('pt-BR', {
-            minimumFractionDigits: 4,
-            maximumFractionDigits: 4
+            let contentPerFeature = conteudo.replace(/\{([\w_]+)\}/g, function (_, key) {
+                let value = props[key];
+                if ((key === 'area' || key === 'area_ha' || key === 'area_hecta' || key === 'hectares' || key === 'area_est_ha' || key === 'qtd_area_d' || key === 'area_km' || key === 'ha') && typeof value === 'number') {
+                    return value.toLocaleString('pt-BR', {
+                        minimumFractionDigits: 4,
+                        maximumFractionDigits: 4
+                    });
+                }
+
+                return (value !== undefined && value !== null) ? value : '-';
             });
-        }
 
-            return (value !== undefined && value !== null) ? value : '-';
-        });
+            // Atualiza título
+            document.getElementById('staticBackdropLabel').innerText = titulo;
 
-        // Atualiza título
-        document.getElementById('staticBackdropLabel').innerText = titulo;
+            // Atualiza body
+            document.getElementById('modalBody').innerHTML = contentPerFeature;
 
-        // Atualiza body
-        document.getElementById('modalBody').innerHTML = contentPerFeature;
-
-        // Abre modal usando Bootstrap
-        var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
-        myModal.show();
+            // Abre modal usando Bootstrap
+            var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+            myModal.show();
 
         })
 
@@ -80,25 +80,69 @@ function createLayer(urlLayer, layerOptions, map, id, conteudo, titulo) {
 
 var layers1 = {};
 
-function addRemoverLayer2(layerOptions, map, id, conteudo = '', titulo = ''){
+function addRemoverLayer2(layerOptions, map, id, conteudo = '', titulo = '', editBtn, editModal) {
 
     var checkbox = document.getElementById(id);
 
     if (checkbox.checked) {
         // Se o checkbox estiver marcado, cria a camada e a adiciona
         layers1[id] = createLayer2(layerOptions, map, id, conteudo, titulo);
+        document.getElementById(editBtn).style.display = 'inline-block';
+        document.getElementById(editModal).style.display = 'inline-block';
 
     } else {
         // Se o checkbox estiver desmarcado, remove a camada do mapa
         if (layers1[id]) {
-        map.removeLayer(layers1[id]);  // Remove a camada correta (cluster ou não)
-        delete layers1[id];  // Remove a referência da camada
+            map.removeLayer(layers1[id]);  // Remove a camada correta (cluster ou não)
+            delete layers1[id];  // Remove a referência da camada
+            document.getElementById(editBtn).style.display = 'none';
+            document.getElementById(editModal).style.display = 'none';
         }
     }
 
 
 
+
+
 }
+
+function addRemoverLayerEdit2(layerOptions, map, id, conteudo = '', titulo = '', editBtnId, geom) {
+
+    let editing = false; // estado do botão
+    let editBtn = document.getElementById(editBtnId);
+    let hiddenInput = document.getElementById(geom); // seu input hidden
+
+    console.log(editing);
+    console.log(editBtn);
+    console.log(hiddenInput);
+
+    editBtn.addEventListener("click", function () {
+        const current = layers1[id];
+
+        if (!editing) {
+            // Inicia edição
+            if (current.pm) current.pm.enable();
+            editing = true;
+            editBtn.style.color = "green";
+        } else {
+            // Finaliza edição
+            if (current.pm) current.pm.disable();
+            editing = false;
+            editBtn.style.color = "black";
+// JSON.stringify(layer.toGeoJSON().features[0].geometry)
+            // Atualiza o input hidden com todo o GeoJSON da FeatureCollection
+            if (current.toGeoJSON) {
+                hiddenInput.value = JSON.stringify(current.toGeoJSON().features[0].geometry);
+                console.log("GeoJSON salvo no input:", hiddenInput.value);
+            }
+        }
+    });
+
+
+}
+
+
+
 
 
 
@@ -112,13 +156,13 @@ function createLayer2(layerOptions, map, id, conteudo, titulo) {
 
     var url = 'http://localhost/sig_nasa/';
 
-    $.getJSON(url+'nasaTabela.php', function(data) {
+    $.getJSON(url + 'nasaTabela.php', function (data) {
 
         console.log(data);
 
         layer = L.geoJSON(data, {
             filter: function (features) {
-                if(features.properties.gid == id){
+                if (features.properties.gid == id) {
                     return true
                 }
             },
@@ -127,32 +171,32 @@ function createLayer2(layerOptions, map, id, conteudo, titulo) {
         });
 
 
-        layer.on('click', function(e) {
+        layer.on('click', function (e) {
 
-        const props = e.layer.feature.properties;
+            const props = e.layer.feature.properties;
 
 
-        let contentPerFeature = conteudo.replace(/\{([\w_]+)\}/g, function(_, key) {
-        let value = props[key];
-        if ((key === 'area' || key === 'area_ha' || key === 'area_hecta' || key === 'hectares' || key === 'area_est_ha' || key === 'qtd_area_d' || key === 'area_km' || key === 'ha') && typeof value === 'number') {
-            return value.toLocaleString('pt-BR', {
-            minimumFractionDigits: 4,
-            maximumFractionDigits: 4
+            let contentPerFeature = conteudo.replace(/\{([\w_]+)\}/g, function (_, key) {
+                let value = props[key];
+                if ((key === 'area' || key === 'area_ha' || key === 'area_hecta' || key === 'hectares' || key === 'area_est_ha' || key === 'qtd_area_d' || key === 'area_km' || key === 'ha') && typeof value === 'number') {
+                    return value.toLocaleString('pt-BR', {
+                        minimumFractionDigits: 4,
+                        maximumFractionDigits: 4
+                    });
+                }
+
+                return (value !== undefined && value !== null) ? value : '-';
             });
-        }
 
-            return (value !== undefined && value !== null) ? value : '-';
-        });
+            // Atualiza título
+            document.getElementById('staticBackdropLabel').innerText = titulo;
 
-        // Atualiza título
-        document.getElementById('staticBackdropLabel').innerText = titulo;
+            // Atualiza body
+            document.getElementById('modalBody').innerHTML = contentPerFeature;
 
-        // Atualiza body
-        document.getElementById('modalBody').innerHTML = contentPerFeature;
-
-        // Abre modal usando Bootstrap
-        var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
-        myModal.show();
+            // Abre modal usando Bootstrap
+            var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+            myModal.show();
 
         })
 

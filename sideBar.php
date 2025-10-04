@@ -141,19 +141,21 @@ include('./db.php');
                 <span class="leaflet-sidebar-close"><i class="bi bi-chevron-left"></i></span>
             </h1>
             <div id="texto2">
-
+            <br>
                 <?php
 
-                $sql = "SELECT *, ST_AsGeoJSON(geom) as geom_json FROM nasa2025.nasa_agua WHERE fk_user=2";
+                $sql = "SELECT *, ST_AsGeoJSON(geom) as geom_json FROM nasa2025.nasa_agua WHERE fk_user=2 ORDER BY gid DESC";
                 $result = pg_query($connPg, $sql);
                 if (pg_num_rows($result)) {
                     while ($row = pg_fetch_assoc($result)) {
 
                 ?>
 
-                <input class="input" type="checkbox" onclick="addRemoverLayer2(nasa_options, map, <?php echo $row['gid']; ?>, nasa_conteudo, '<?php echo $row['titulo'] ?>')" id="<?php echo $row['gid'] ?>"> <?php echo $row['titulo'] ?>
+                <input class="input" type="checkbox" onclick="addRemoverLayer2(nasa_options, map, <?php echo $row['gid']; ?>, nasa_conteudo, '<?php echo $row['titulo'] ?>', 'editLayer<?php echo $row['gid'] ?>', 'editModalLayer<?php echo $row['gid'] ?>')" id="<?php echo $row['gid'] ?>"> <?php echo $row['titulo'] ?>
                 
-                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#geoModal<?php echo $row['gid'] ?>"><i class="bi bi-pencil"></i></button>
+                <button id="editModalLayer<?php echo $row['gid'] ?>" style=" display: none; background: transparent; cursor: pointer; border: none; font-size: 14px;" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#geoModal<?php echo $row['gid'] ?>">📍</button>
+
+                <button style="display: none; background: transparent; cursor: pointer; border: none; font-size: 14px;" class="btn btn-success" id="editLayer<?php echo $row['gid'] ?>" onclick="addRemoverLayerEdit2(nasa_options, map, <?php echo $row['gid']; ?>, nasa_conteudo, '<?php echo $row['titulo'] ?>', 'editLayer<?php echo $row['gid'] ?>', 'geom<?php echo $row['gid']; ?>')">✏️</button>
 
 
 <!-- Modal -->
@@ -210,7 +212,7 @@ include('./db.php');
                     </div>
 
                     <!-- Geometria -->
-                    <input type="hidden" name="geom" value='<?php echo $row['geom_json']; ?>'>
+                    <input type="hidden" name="geom" id="geom<?php echo $row['gid']; ?>" value='<?php echo $row['geom_json']; ?>'>
 
                      <!-- Geometria -->
                     <input type="hidden" name="gid" value='<?php echo $row['gid']; ?>'>
@@ -329,6 +331,7 @@ document.querySelector('#editor<?php echo $row['gid'] ?> .ql-editor').style.minH
                 
 
                 <br>
+                 <br>
 
                 <?php
                     }
