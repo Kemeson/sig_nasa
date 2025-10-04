@@ -112,12 +112,11 @@ function addRemoverLayerEdit2(layerOptions, map, id, conteudo = '', titulo = '',
     let editBtn = document.getElementById(editBtnId);
     let hiddenInput = document.getElementById(geom); // seu input hidden
 
-    console.log(editing);
-    console.log(editBtn);
-    console.log(hiddenInput);
 
-    editBtn.addEventListener("click", function () {
         const current = layers1[id];
+
+        console.log('Layer atual:', current);
+console.log('No mapa?', map.hasLayer(current));
 
         if (!editing) {
             // Inicia edição
@@ -136,7 +135,7 @@ function addRemoverLayerEdit2(layerOptions, map, id, conteudo = '', titulo = '',
                 console.log("GeoJSON salvo no input:", hiddenInput.value);
             }
         }
-    });
+   
 
 
 }
