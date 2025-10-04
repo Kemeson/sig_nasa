@@ -105,10 +105,10 @@ function addRemoverLayer2(layerOptions, map, id, conteudo = '', titulo = '', edi
 
 
 }
-
+let editing = false; // estado do botão
 function addRemoverLayerEdit2(layerOptions, map, id, conteudo = '', titulo = '', editBtnId, geom) {
 
-    let editing = false; // estado do botão
+    
     let editBtn = document.getElementById(editBtnId);
     let hiddenInput = document.getElementById(geom); // seu input hidden
 
