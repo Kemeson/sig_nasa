@@ -9,6 +9,7 @@ $title = trim($_POST['title'] ?? '');
 $categoria = trim($_POST['categoria'] ?? '');
 $geom = trim($_POST['geom'] ?? '');
 $content = $_POST['content'] ?? ''; // caso queira salvar descrição também
+$gid = $_POST['gid'] ?? ''; // caso queira salvar descrição também
 
 // Validação mínima
 if (empty($title) || empty($categoria) || empty($geom)) {
@@ -53,7 +54,7 @@ if (isset($_FILES['featured_image']) && $_FILES['featured_image']['error'] === U
 $sql = "UPDATE nasa2025.nasa_agua
         SET titulo=$1, categoria=$2, fk_user=$3, geom=$4, descricao=$5" .
        ($featured_image ? ", imagem_dest=$6" : "") .
-       " WHERE gid = 3;";
+       " WHERE gid = '".$gid."';";
 
 // Monta os parâmetros dinamicamente
 $params = [$title, $categoria, $_SESSION['user_id'], $geom, $content];
