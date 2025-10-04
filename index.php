@@ -103,119 +103,174 @@
 <script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
 
 <script>
-  // Configuração da barra de ferramentas
-  const toolbarOptions = [
-    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-    ['blockquote', 'code-block'],
+  // // Configuração da barra de ferramentas
+  // const toolbarOptions = [
+  //   [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-        // Alinhamento e direção
-    [{ 'direction': 'rtl' }],
-    [{ 'align': [] }],
-    ['bold', 'italic', 'underline', 'strike'],
+  //   ['blockquote', 'code-block'],
 
-    [{ 'color': [] }, { 'background': [] }],
-    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-    ['link', 'image', 'video'],
-    ['clean']
-  ];
+  //       // Alinhamento e direção
+  //   [{ 'direction': 'rtl' }],
+  //   [{ 'align': [] }],
+  //   ['bold', 'italic', 'underline', 'strike'],
 
-  // Inicialização do Quill com módulo de redimensionamento
-  const quill = new Quill('#editor', {
-    theme: 'snow',
-    placeholder: 'Escreva o conteúdo da postagem...',
-    modules: {
-      toolbar: {
-        container: toolbarOptions,
-        handlers: {
-          image: imageHandler
-        }
-      },
-      imageResize: {
-        displaySize: true
-      }
-    }
-  });
+  //   [{ 'color': [] }, { 'background': [] }],
+  //   [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+  //   ['link', 'image', 'video'],
+  //   ['clean']
+  // ];
 
-  // Função para upload de imagens
-  async function imageHandler() {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
+  // // Inicialização do Quill com módulo de redimensionamento
+  // const quill = new Quill('#editor', {
+  //   theme: 'snow',
+  //   placeholder: 'Escreva o conteúdo da postagem...',
+  //   modules: {
+  //     toolbar: {
+  //       container: toolbarOptions,
+  //       handlers: {
+  //         image: imageHandler
+  //       }
+  //     },
+  //     imageResize: {
+  //       displaySize: true
+  //     }
+  //   }
+  // });
 
-    input.onchange = async () => {
-      const file = input.files[0];
-      if (!file) return;
+  // // Função para upload de imagens
+  // async function imageHandler() {
+  //   const input = document.createElement('input');
+  //   input.setAttribute('type', 'file');
+  //   input.setAttribute('accept', 'image/*');
+  //   input.click();
 
-      // Verificação básica do arquivo
-      if (file.size > 5 * 1024 * 1024) {
-        alert('O arquivo é muito grande. Tamanho máximo: 5MB');
-        return;
-      }
+  //   input.onchange = async () => {
+  //     const file = input.files[0];
+  //     if (!file) return;
 
-      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-      if (!validTypes.includes(file.type)) {
-        alert('Formato de arquivo inválido. Use JPG, PNG ou GIF');
-        return;
-      }
+  //     // Verificação básica do arquivo
+  //     if (file.size > 5 * 1024 * 1024) {
+  //       alert('O arquivo é muito grande. Tamanho máximo: 5MB');
+  //       return;
+  //     }
 
-      try {
-        const formData = new FormData();
-        formData.append('image', file);
+  //     const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  //     if (!validTypes.includes(file.type)) {
+  //       alert('Formato de arquivo inválido. Use JPG, PNG ou GIF');
+  //       return;
+  //     }
 
-        const res = await fetch('upload_image.php', {
-          method: 'POST',
-          body: formData
-        });
+  //     try {
+  //       const formData = new FormData();
+  //       formData.append('image', file);
 
-        if (!res.ok) throw new Error('Falha no upload');
+  //       const res = await fetch('upload_image.php', {
+  //         method: 'POST',
+  //         body: formData
+  //       });
 
-        const data = await res.json();
+  //       if (!res.ok) throw new Error('Falha no upload');
 
-        if (data.success && data.url) {
-          const range = quill.getSelection(true);
-          quill.insertEmbed(range.index, 'image', data.url);
-          quill.setSelection(range.index + 1);
-        } else {
-          alert(data.error || 'Erro desconhecido ao enviar imagem');
-        }
-      } catch (error) {
-        console.error('Erro no upload:', error);
-        alert('Erro ao enviar imagem. Por favor, tente novamente.');
-      }
-    };
-  }
+  //       const data = await res.json();
 
-  // Preparação do formulário antes do envio
-  function prepareForm() {
-    const title = document.getElementById('title').value.trim();
-    const content = document.getElementById('content');
-    const category = document.getElementById('category').value;
+  //       if (data.success && data.url) {
+  //         const range = quill.getSelection(true);
+  //         quill.insertEmbed(range.index, 'image', data.url);
+  //         quill.setSelection(range.index + 1);
+  //       } else {
+  //         alert(data.error || 'Erro desconhecido ao enviar imagem');
+  //       }
+  //     } catch (error) {
+  //       console.error('Erro no upload:', error);
+  //       alert('Erro ao enviar imagem. Por favor, tente novamente.');
+  //     }
+  //   };
+  // }
+
+  // // Preparação do formulário antes do envio
+  // function prepareForm() {
+  //   const title = document.getElementById('title').value.trim();
+  //   const content = document.getElementById('content');
+  //   const category = document.getElementById('category').value;
     
-    // Salva o conteúdo HTML do editor
-    content.value = quill.root.innerHTML.trim();
+  //   // Salva o conteúdo HTML do editor
+  //   content.value = quill.root.innerHTML.trim();
 
-    // Validações
-    if (!title) {
-      alert('O título não pode estar vazio.');
-      return false;
-    }
+  //   // Validações
+  //   if (!title) {
+  //     alert('O título não pode estar vazio.');
+  //     return false;
+  //   }
 
-    if (content.value === '' || content.value === '<p><br></p>') {
-      alert('O conteúdo da postagem não pode estar vazio.');
-      return false;
-    }
+  //   if (content.value === '' || content.value === '<p><br></p>') {
+  //     alert('O conteúdo da postagem não pode estar vazio.');
+  //     return false;
+  //   }
 
-    if (!category) {
-      alert('Selecione uma categoria.');
-      return false;
-    }
+  //   if (!category) {
+  //     alert('Selecione uma categoria.');
+  //     return false;
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
   
+</script>
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("loginForm");
+  const btn = document.getElementById("loginBtn");
+  const msgDiv = document.getElementById("loginMessage");
+
+  btn.addEventListener("click", async () => {
+    const data = {
+      email: form.email.value,
+      password: form.password.value
+    };
+
+    try {
+      const response = await fetch("./login.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      msgDiv.style.display = "block";
+      msgDiv.className = "mb-3 alert " + (result.success ? "alert-success" : "alert-danger");
+      msgDiv.textContent = result.success
+        ? "✅ " + result.message
+        : "❌ " + result.message;
+
+      if (result.success) {
+        setTimeout(() => {
+          const modal = bootstrap.Modal.getInstance(document.getElementById("loginModal"));
+          modal.hide();
+
+          //Recarrega a página
+          location.reload();
+
+            // Redireciona para outra página
+            // window.location.href = "dashboard.php"; // coloque a página desejada aqui
+        }, 1000);
+      }
+
+    } catch (error) {
+      msgDiv.style.display = "block";
+      msgDiv.className = "mb-3 alert alert-warning";
+      msgDiv.textContent = "⚠️ Erro na requisição de login";
+      console.error(error);
+    }
+  });
+});
+
 </script>
 
 
