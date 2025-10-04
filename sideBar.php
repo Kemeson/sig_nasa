@@ -7,6 +7,7 @@
         <ul role="tablist">
             <li><a href="#home" role="tab"><i class="bi bi-list active"></i></a></li>
             <li><a href="#autopan" role="tab"><i class="bi bi-arrows-move"></i></a></li>
+            <li><a href="#login" role="tab"><i class="bi bi-person"></i></a></li>
             <!-- <li><a href="#autopan2" role="tab"><i class="bi bi-arrows-move"></i></a></li> -->
         </ul>
 
@@ -1046,6 +1047,105 @@
                 Try opening and closing the sidebar from this pane!
             </p>
         </div>
+<div class="leaflet-sidebar-pane" id="login">
+    <h1 class="leaflet-sidebar-header">
+        Login
+        <span class="leaflet-sidebar-close"><i class="bi bi-chevron-left"></i></span>
+    </h1>
+    
+    <p>
+        Please log in to continue.  
+        Click the button below to open the login form.
+    </p>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+        Open Login Form
+    </button>
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm">
+
+         <!-- Mensagem de erro -->
+          <div id="loginMessage" class="mb-3" style="display:none;">
+            <!-- Aqui vai aparecer a mensagem -->
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email" name="email" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+          </div>
+          <button type="button" id="loginBtn" class="btn btn-success">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("loginForm");
+  const btn = document.getElementById("loginBtn");
+  const msgDiv = document.getElementById("loginMessage");
+
+  btn.addEventListener("click", async () => {
+    const data = {
+      email: form.email.value,
+      password: form.password.value
+    };
+
+    try {
+      const response = await fetch("./login.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      msgDiv.style.display = "block";
+      msgDiv.className = "mb-3 alert " + (result.success ? "alert-success" : "alert-danger");
+      msgDiv.textContent = result.success
+        ? "✅ " + result.message
+        : "❌ " + result.message;
+
+      if (result.success) {
+        setTimeout(() => {
+          const modal = bootstrap.Modal.getInstance(document.getElementById("loginModal"));
+          modal.hide();
+
+          //Recarrega a página
+          location.reload();
+
+            // Redireciona para outra página
+            // window.location.href = "dashboard.php"; // coloque a página desejada aqui
+        }, 1000);
+      }
+
+    } catch (error) {
+      msgDiv.style.display = "block";
+      msgDiv.className = "mb-3 alert alert-warning";
+      msgDiv.textContent = "⚠️ Erro na requisição de login";
+      console.error(error);
+    }
+  });
+});
+
+</script>
+
 
         <!-- <div class="leaflet-sidebar-pane" id="autopan2">
             <h1 class="leaflet-sidebar-header">
